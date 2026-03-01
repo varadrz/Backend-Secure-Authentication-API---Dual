@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head><title>Auth API Tester</title></head>
+<body>
+  <h2>Auth API Tester</h2>
+
+  <h3>Register</h3>
+  <input id="reg-username" placeholder="Username" />
+  <input id="reg-email" placeholder="Email" />
+  <input id="reg-password" placeholder="Password" type="password" />
+  <button onclick="register()">Register</button>
+  <pre id="reg-result"></pre>
+
+  <h3>Login</h3>
+  <input id="login-email" placeholder="Email" />
+  <input id="login-password" placeholder="Password" type="password" />
+  <button onclick="login()">Login</button>
+  <pre id="login-result"></pre>
+
+  <h3>Admin Route</h3>
+  <input id="token" placeholder="Paste access token here" style="width:400px"/>
+  <button onclick="adminRoute()">Hit /admin</button>
+  <pre id="admin-result"></pre>
+
+  <script>
+    const BASE = 'http://localhost:5000';
+    let accessToken = '';
+    let refreshToken = '';
+
+    async function register() {
+      const res = await fetch(`${BASE}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: document.getElementById('reg-username').value,
+          email: document.getElementById('reg-email').value,
+          password: document.getElementById('reg-password').value
+        })
+      });
+      document.getElementById('reg-result').textContent = JSON.stringify(await res.json(), null, 2);
+    }
+
+    async function login() {
+      const res = await fetch(`${BASE}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: document.getElementById('login-email').value,
+          password: document.getElementById('login-password').value
+        })
+      });
+      const data = await res.json();
+      accessToken = data.accessToken || '';
+      refreshToken = data.refreshToken || '';
+      document.getElementById('token').value = accessToken;
+      document.getElementById('login-result').textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function adminRoute() {
+      const token = document.getElementById('token').value;
+      const res = await fetch(`${BASE}/admin`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      document.getElementById('admin-result').textContent = JSON.stringify(await res.json(), null, 2);
+    }
+  </script>
+</body>
+</html>
