@@ -1,12 +1,16 @@
 require('dotenv').config();
 const express = require('express');
 const connectDB = require('./config/db');
+const cors = require('cors');
+const path = require('path');
 
 const app = express();
-const cors = require('cors');
-app.use(cors());
+
+// Connect to Database
 connectDB();
 
+// Middleware
+app.use(cors());
 app.use(express.json());
 
 // Security Headers & CSP
@@ -16,15 +20,17 @@ app.use((req, res, next) => {
     res.setHeader("X-Frame-Options", "DENY");
     next();
 });
+
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
-const path = require('path');
+// Static Files
 app.use(express.static(path.join(__dirname, '../public')));
 
+// API Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/admin', require('./routes/adminRoutes'));
 
-// Catch-all for frontend routes
+// Catch-all for frontend routes (SPA support)
 app.get('*', (req, res, next) => {
     if (req.path.startsWith('/api')) return next();
     res.sendFile(path.join(__dirname, '../public/index.html'));
@@ -36,10 +42,8 @@ app.use((req, res) => {
     res.status(404).json({ message: 'Route not found' });
 });
 
-if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
-    app.listen(process.env.PORT || 5000, () =>
-        console.log(`Server running on port ${process.env.PORT || 5000}`)
-    );
-}
-
-module.exports = app;
+// Start Server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () =>
+    console.log(`Server running on port ${PORT}`)
+);
