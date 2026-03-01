@@ -66,3 +66,19 @@ JWT_REFRESH_EXPIRES=7d
 ## Testing the API
 - **Sample Requests**: Refer to `sample_requests.http` for example `curl` and REST client calls.
 - **Interactive UI**: Open `test.html` in your browser for a basic visual test bench.
+
+## Deployment on Vercel
+1. Install Vercel CLI: `npm i -g vercel`
+2. Run `vercel` in the project root.
+3. Add Environment Variables in the Vercel Dashboard for:
+   - `MONGO_URI`
+   - `JWT_ACCESS_SECRET`
+   - `JWT_REFRESH_SECRET`
+   - `JWT_ACCESS_EXPIRES`
+   - `JWT_REFRESH_EXPIRES`
+4. The API will be live at `https://your-project-name.vercel.app`.
+
+### Important Compatibility Notes
+- **Serverless**: The app is configured with `vercel.json` to run as a serverless function.
+- **Database**: Ensure your MongoDB Atlas cluster allows connections from all IPs (`0.0.0.0/0`) since Vercel uses dynamic IP addresses.
+- **Persistence**: You can successfully create new users and passwords as they are stored in your cloud MongoDB database.

@@ -28,3 +28,5 @@ app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
 app.listen(process.env.PORT || 5000, () =>
     console.log(`Server running on port ${process.env.PORT || 5000}`)
 );
+
+module.exports = app;
