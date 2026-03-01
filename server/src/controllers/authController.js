@@ -10,16 +10,27 @@ const generateTokens = (user) => {
 
 // POST /api/auth/register
 exports.register = async (req, res) => {
+    console.log('Register attempt:', req.body.email);
     try {
-        const { username, email, password, role } = req.body;
-        const exists = await User.findOne({ email });
-        if (exists) return res.status(409).json({ message: 'Email already registered' });
+        const { email, password, role } = req.body;
 
-        // Prevent self-assigning admin via API
-        const user = await User.create({ username, email, password, role: role === 'admin' ? 'user' : role });
+        const existingEmail = await User.findOne({ email });
+        if (existingEmail) {
+            console.log('Registration failed: Email exists');
+            return res.status(409).json({ message: 'Email already registered' });
+        }
+
+        // Create user with provided role
+        const user = await User.create({ email, password, role });
+        console.log('User created successfully:', user._id);
         res.status(201).json({ message: 'Registered successfully', userId: user._id });
     } catch (err) {
-        res.status(500).json({ message: 'Server error', error: err.message });
+        console.error('Registration ERROR:', err);
+        res.status(500).json({
+            message: 'Internal Server Error',
+            details: err.message,
+            stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+        });
     }
 };
 

@@ -4,6 +4,7 @@
     "description": "Secure Authentication MERN Stack Application",
     "scripts": {
         "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+        "clean": "rm -rf node_modules package-lock.json && cd server && rm -rf node_modules package-lock.json && cd ../client && rm -rf node_modules package-lock.json",
         "dev:server": "cd server && npm run dev",
         "dev:client": "cd client && npm run dev",
         "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",

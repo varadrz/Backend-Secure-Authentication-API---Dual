@@ -27,6 +27,25 @@ app.use(express.json());
 
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
+// Debug Logger
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+});
+
+// Status Check
+app.get('/status', (req, res) => {
+    const distPath = path.join(__dirname, '../../client/dist');
+    const indexExists = require('fs').existsSync(path.join(distPath, 'index.html'));
+    res.json({
+        status: 'UP',
+        dirname: __dirname,
+        distPath: distPath,
+        indexExists: indexExists,
+        cwd: process.cwd()
+    });
+});
+
 // Static Files (Serve React build)
 app.use(express.static(path.join(__dirname, '../../client/dist')));
 
