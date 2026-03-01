@@ -20,6 +20,4 @@ A secure Node.js backend for user authentication and role-based access control.
 - **Protection**: Brute-force rate limiting & Input validation
 - **Headers**: CSP & Security best practices (XSS, Clickjacking protection)
 
-
-
 > See `sample_requests.http` or `test.html` for testing.
