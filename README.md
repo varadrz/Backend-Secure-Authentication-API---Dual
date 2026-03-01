@@ -20,9 +20,6 @@ A secure Node.js backend for user authentication and role-based access control.
 - **Protection**: Brute-force rate limiting & Input validation
 - **Headers**: CSP & Security best practices (XSS, Clickjacking protection)
 
-## 🌐 Deployment (Vercel)
-1. Run `vercel` in root.
-2. Add your `.env` variables in Vercel Dashboard.
-3. Ensure MongoDB Atlas allows `0.0.0.0/0` for serverless compatibility.
+
 
 > See `sample_requests.http` or `test.html` for testing.
