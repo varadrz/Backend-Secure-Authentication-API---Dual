@@ -1,22 +1,28 @@
-# Secure Authentication API
+# Secure Authentication API (MERN Stack)
 
-A professional-grade backend implementation of a secure authentication and authorization system using Node.js, Express, and MongoDB. This project demonstrates industry-standard security practices including JWT dual-token strategy, password hashing, and middleware-based access control.
+A professional-grade full-stack implementation of a secure authentication and authorization system using the MERN (MongoDB, Express, React, Node) stack. This project demonstrates industry-standard security practices, including JWT dual-token strategy, role-based access control, and modern React frontend architecture.
+
+## Project Structure
+
+This project follows a decoupled MERN stack architecture:
+- **client/**: A modern React application (Vite-powered) handling the UI and authentication state.
+- **server/**: An Express/Node.js backend API managing security, business logic, and MongoDB persistence.
+- **Root Directory**: Orchestrates both environments using a single `package.json` and shared configuration.
 
 ## Technical Stack
 
-- **Runtime**: Node.js
-- **Framework**: Express.js
+- **Frontend**: React.js, React Router, Axios
+- **Backend**: Node.js, Express.js
 - **Database**: MongoDB (Atlas)
-- **ODM**: Mongoose
-- **Security**: JWT (jsonwebtoken), Bcryptjs, Helmet, Express-rate-limit
-- **Validation**: Express-validator
+- **Security**: JWT (Access & Refresh tokens), Password Hashing (Bcryptjs), Helmet, Rate Limiting
+- **Dev Tools**: Vite, Concurrently, Nodemon
 
 ## Core Features
 
 - **User Roles**: Comprehensive role-based access control (RBAC) supporting 'user' and 'admin' roles.
 - **Dual-Token Authentication**: Secure session management using short-lived Access Tokens and long-lived Refresh Tokens.
-- **Token Rotation**: Implementation of refresh token rotation and invalidation to mitigate session hijacking risks.
-- **Protected Routing**: Granular access control for sensitive endpoints using custom middleware.
+- **Protected Routing**: Both client-side (React Router) and server-side (Express middleware) protection for sensitive resources.
+- **Modern UI**: A responsive, professional-grade interface with clean styling and dynamic state updates.
 
 ## Security Implementation
 
@@ -30,17 +36,8 @@ The system utilizes a two-tier token strategy:
 
 ### 3. Middleware-driven Defense
 - **Authorization**: Custom `adminOnly` middleware validates the user's role extracted from the JWT payload.
-- **Rate Limiting**: Throttling implemented on authentication routes to prevent brute-force and credential stuffing attacks.
-- **HTTP Headers**: Leveraging **Helmet** to set secure headers (CSP, HSTS, No-Sniff) to protect against common web vulnerabilities like XSS and Clickjacking.
-- **Input Validation**: Centralized validation logic to sanitize and verify all incoming request bodies.
-
-## Project Structure
-
-- `src/controllers/`: Business logic for authentication and user operations.
-- `src/models/`: Mongoose schemas and data models.
-- `src/routes/`: Express route definitions for auth and admin modules.
-- `src/middleware/`: Security, authentication, and validation layers.
-- `src/config/`: Database connection and environment configurations.
+- **Rate Limiting**: Throttling implemented on authentication routes to prevent brute-force attacks.
+- **Security Headers**: Leveraging **Helmet** to set secure headers (CSP, HSTS, No-Sniff) to protect against XSS and Clickjacking.
 
 ## API Endpoints
 
@@ -51,16 +48,16 @@ The system utilizes a two-tier token strategy:
 - `POST /api/auth/logout`: Invalidate the current session and refresh token.
 
 ### Administrative
-- `GET /admin`: Access the admin-only dashboard (Requires 'admin' role).
+- `GET /admin`: Access the admin-only resources.
 
 ## Setup and Installation
 
 ### 1. Prerequisites
 - Node.js (v14 or higher)
-- MongoDB Atlas account or local MongoDB instance
+- MongoDB Atlas account
 
 ### 2. Environment Configuration
-Create a `.env` file in the root directory with the following variables:
+Create a `.env` file in the `server/` directory with the following variables:
 ```env
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
@@ -71,15 +68,15 @@ JWT_REFRESH_EXPIRES=7d
 ```
 
 ### 3. Installation
+From the root directory, install all dependencies for both client and server:
 ```bash
-npm install
+npm run install:all
 ```
 
 ### 4. Running the Application
-To start the development server with nodemon:
+To start both the backend and frontend in development mode:
 ```bash
 npm run dev
 ```
 
-## Testing
-Comprehensive testing can be performed using the included `sample_requests.http` file (compatible with REST Client extensions) or via standard `curl` commands as documented in the codebase.
+The application will be available at `http://localhost:5173` (React dev server).
