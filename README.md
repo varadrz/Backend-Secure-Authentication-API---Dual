@@ -1,54 +1,28 @@
 # Secure Authentication API (MERN Stack)
 
-A professional-grade full-stack implementation of a secure authentication and authorization system using the MERN (MongoDB, Express, React, Node) stack. This project demonstrates industry-standard security practices, including JWT dual-token strategy, role-based access control, and modern React frontend architecture.
+A professional-grade, strictly minimalist full-stack implementation of a secure authentication and authorization system using the MERN (MongoDB, Express, React, Node) stack. This project features a clean, white-themed interface with email-only authentication.
 
 ## Project Structure
 
 This project follows a decoupled MERN stack architecture:
-- **client/**: A modern React application (Vite-powered) handling the UI and authentication state.
-- **server/**: An Express/Node.js backend API managing security, business logic, and MongoDB persistence.
-- **Root Directory**: Orchestrates both environments using a single `package.json` and shared configuration.
-
-## Technical Stack
-
-- **Frontend**: React.js, React Router, Axios
-- **Backend**: Node.js, Express.js
-- **Database**: MongoDB (Atlas)
-- **Security**: JWT (Access & Refresh tokens), Password Hashing (Bcryptjs), Helmet, Rate Limiting
-- **Dev Tools**: Vite, Concurrently, Nodemon
+- **client/**: A modern React application (Vite-powered) with a minimalist UI and integrated system documentation.
+- **server/**: An Express/Node.js backend API managing security and MongoDB persistence.
 
 ## Core Features
 
-- **User Roles**: Comprehensive role-based access control (RBAC) supporting 'user' and 'admin' roles.
-- **Dual-Token Authentication**: Secure session management using short-lived Access Tokens and long-lived Refresh Tokens.
-- **Protected Routing**: Both client-side (React Router) and server-side (Express middleware) protection for sensitive resources.
-- **Modern UI**: A responsive, professional-grade interface with clean styling and dynamic state updates.
+- **Minimalist Aesthetic**: Professional white-themed design with no gradients or glows.
+- **Email-Only Auth**: Simplified registration and login workflow (no username required).
+- **System Documentation**: Technical details are integrated directly into the Home page.
+- **Dual-Token Authentication**: Secure session management using Access and Refresh tokens.
 
-## Security Implementation
+## Testing Credentials
 
-### 1. Password Security
-Passwords are never stored in plaintext. The system uses **Bcryptjs** with 12 salt rounds to hash passwords within a Mongoose pre-save hook, ensuring consistent encryption before data persistence.
+Use the following accounts to test the implementation:
 
-### 2. JWT Authentication Flow
-The system utilizes a two-tier token strategy:
-- **Access Tokens (15 min)**: Bearer tokens for stateless authentication on every request.
-- **Refresh Tokens (7 days)**: Stored in the database to allow secure renewal of access tokens, reducing the risk of compromised long-term credentials.
-
-### 3. Middleware-driven Defense
-- **Authorization**: Custom `adminOnly` middleware validates the user's role extracted from the JWT payload.
-- **Rate Limiting**: Throttling implemented on authentication routes to prevent brute-force attacks.
-- **Security Headers**: Leveraging **Helmet** to set secure headers (CSP, HSTS, No-Sniff) to protect against XSS and Clickjacking.
-
-## API Endpoints
-
-### Authentication
-- `POST /api/auth/register`: Create a new user account.
-- `POST /api/auth/login`: Authenticate and receive Access/Refresh tokens.
-- `POST /api/auth/refresh`: Obtain a new access token using a valid refresh token.
-- `POST /api/auth/logout`: Invalidate the current session and refresh token.
-
-### Administrative
-- `GET /admin`: Access the admin-only resources.
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **User** | `simple@example.com` | `password123` |
+| **Admin** | `admin@gmail.com` | `admin` |
 
 ## Setup and Installation
 
@@ -57,7 +31,7 @@ The system utilizes a two-tier token strategy:
 - MongoDB Atlas account
 
 ### 2. Environment Configuration
-Create a `.env` file in the `server/` directory with the following variables:
+Create a `.env` file in the `server/` directory:
 ```env
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
@@ -68,15 +42,14 @@ JWT_REFRESH_EXPIRES=7d
 ```
 
 ### 3. Installation
-From the root directory, install all dependencies for both client and server:
 ```bash
-npm run install:all
+npm install
+cd client && npm install
+cd ../server && npm install
 ```
 
 ### 4. Running the Application
-To start both the backend and frontend in development mode:
 ```bash
 npm run dev
 ```
-
-The application will be available at `http://localhost:5173` (React dev server).
+The application will be available at `http://localhost:5173`.
