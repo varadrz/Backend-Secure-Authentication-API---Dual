@@ -18,12 +18,23 @@ app.use((req, res, next) => {
 });
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
-app.use(express.static('public'));
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/admin', require('./routes/adminRoutes'));
 
-app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
+// Catch-all for frontend routes
+app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next();
+    res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+
+// Final 404 handler for unmatched API routes
+app.use((req, res) => {
+    console.log(`404 - Route not found: ${req.method} ${req.url}`);
+    res.status(404).json({ message: 'Route not found' });
+});
 
 app.listen(process.env.PORT || 5000, () =>
     console.log(`Server running on port ${process.env.PORT || 5000}`)
