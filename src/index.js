@@ -3,23 +3,27 @@ const express = require('express');
 const connectDB = require('./config/db');
 const cors = require('cors');
 const path = require('path');
+const helmet = require('helmet');
 
 const app = express();
 
 // Connect to Database
 connectDB();
 
-// Middleware
+// Security Middleware
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+            "script-src": ["'self'", "'unsafe-inline'"],
+            "style-src": ["'self'", "'unsafe-inline'"],
+        },
+    },
+}));
+
+// Basic Middleware
 app.use(cors());
 app.use(express.json());
-
-// Security Headers & CSP
-app.use((req, res, next) => {
-    res.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'");
-    res.setHeader("X-Content-Type-Options", "nosniff");
-    res.setHeader("X-Frame-Options", "DENY");
-    next();
-});
 
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
