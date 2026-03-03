@@ -1,23 +1,28 @@
 # Secure Authentication API (MERN Stack)
 
-A professional-grade, strictly minimalist full-stack implementation of a secure authentication and authorization system using the MERN (MongoDB, Express, React, Node) stack. This project features a clean, white-themed interface with email-only authentication.
+A professional-grade, strictly minimalist full-stack implementation of a secure authentication and authorization system using the MERN (MongoDB, Express, React, Node) stack.
 
-## Project Structure
+## Architecture & Technical Choices
 
-This project follows a decoupled MERN stack architecture:
-- **client/**: A modern React application (Vite-powered) with a minimalist UI and integrated system documentation.
-- **server/**: An Express/Node.js backend API managing security and MongoDB persistence.
+### 1. Decoupled MERN Stack
+The project is split into two distinct directories:
+- **[client/](file:///p:/Backend%20Secure%20Authentication%20API%20Dual/client/)**: A Vite-powered React SPA. We chose Vite for its superior developer experience and faster build times compared to CRA.
+- **[server/](file:///p:/Backend%20Secure%20Authentication%20API%20Dual/server/)**: A Node.js/Express API. Decoupling ensures that the frontend and backend can be scaled and deployed independently.
 
-## Core Features
+### 2. Dual-Token Authentication (JWT)
+We use a short-lived `AccessToken` (15m) and a long-lived `RefreshToken` (7d).
+- **Why?**: This balances security and user experience. Access tokens are kept in memory (or short-lived cookies) to minimize damage if stolen. Refresh tokens allow users to stay logged in without re-entering credentials, but they are stored in the database for "sliding sessions" and can be revoked if suspicious activity is detected (token reuse detection).
 
-- **Minimalist Aesthetic**: Professional white-themed design with no gradients or glows.
-- **Email-Only Auth**: Simplified registration and login workflow (no username required).
-- **System Documentation**: Technical details are integrated directly into the Home page.
-- **Dual-Token Authentication**: Secure session management using Access and Refresh tokens.
+### 3. Security-First Backend
+- **Helmet.js**: Automatically sets various HTTP headers to protect against common attacks like XSS and Clickjacking.
+- **CORS**: Strictly configured to only allow communication from the trusted frontend origin.
+- **Express-Rate-Limit**: Prevents brute-force attacks by limiting the number of requests from a single IP.
+- **Bcrypt.js**: Industry-standard password hashing with a salt factor of 10.
+
+### 4. Robust Validation
+We use **express-validator** as middleware to sanitize and validate all incoming requests before they reach the controllers. This prevents NoSQL injection and ensures data integrity.
 
 ## Testing Credentials
-
-Use the following accounts to test the implementation:
 
 | Role | Email | Password |
 | :--- | :--- | :--- |
@@ -43,7 +48,10 @@ JWT_REFRESH_EXPIRES=7d
 
 ### 3. Installation
 ```bash
+# Install root dependencies
 npm install
+
+# Install sub-project dependencies
 cd client && npm install
 cd ../server && npm install
 ```
@@ -53,3 +61,4 @@ cd ../server && npm install
 npm run dev
 ```
 The application will be available at `http://localhost:5173`.
+
